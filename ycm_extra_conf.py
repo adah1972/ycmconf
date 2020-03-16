@@ -76,7 +76,7 @@ cpp_additional_flags = [
     "c++",
 
     # Use the latest standard if possible.
-    "-std=c++11",
+    "-std=c++17",
 ]
 
 
