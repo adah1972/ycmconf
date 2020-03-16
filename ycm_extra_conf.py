@@ -579,23 +579,16 @@ def save_add_flags(old_flags, additional_flags):
 # Methods to create the correct return format wanted by YCM
 ##
 
-def create_result(flags, do_cache=True, **kwargs):
+def create_result(flags):
     """
     Create the correct return value for YCM.
 
     :param flags: The flags for the requested file.
     :type flags: list[str]
-    :param do_cache: If the result should be cached by YCM or not. If this is
-                     omitted True is used.
-    :type do_cache: bool
-    :param kwargs: Additional arguments.
-    :type kwargs: dict[str,object]
     :rtype: dict[str,object]
     :return: A dictionary in the format wanted by YCM.
     """
-    ret = {"flags": flags, "do_cache": do_cache}
-
-    return dict(ret, **kwargs)
+    return {"flags": flags}
 
 
 ##
