@@ -701,7 +701,7 @@ def parse_default_flags(file_name):
 
 def FlagsForFile(file_name, **kwargs):
     """
-    This method is the entry point for the YCM plugin. It is called by the
+    This method is the old entry point for the YCM plugin. It is called by the
     plugin to get the all necessary compiler flags to parse a specific file
     given as argument.
 
@@ -709,8 +709,8 @@ def FlagsForFile(file_name, **kwargs):
                       auto completion.
     :type file_name: str
     :param kwargs: Additional key word arguments.
-    :type kwargs: dict[str,str]
-    :rtype: dict[str,object]
+    :type kwargs: dict[str, str]
+    :rtype: dict[str, object]
     :return: The compilation flags for the file in the format wanted by YCM.
     """
     # First check for a compile_commands.json file.
@@ -726,3 +726,20 @@ def FlagsForFile(file_name, **kwargs):
         # No files exists. Use the default flags.
         return parse_default_flags(file_name)
 
+
+def Settings(**kwargs):
+    """
+    This method is the new entry point for the YCM plugin. It is called by the
+    plugin to get the all necessary compiler flags to parse a specific file
+    given as argument.
+
+    :param kwargs: The key word arguments.
+    :type kwargs: dict[str, str]
+    :rtype: dict[str, object]
+    :return: The compilation flags for the file in the format wanted by YCM.
+    """
+    language = kwargs['language']
+    if language == 'cfamily':
+        return FlagsForFile(kwargs['filename'])
+
+    return {}
