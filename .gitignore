@@ -5,3 +5,6 @@ __pycache__
 # Vim temporary files
 *~
 *.swp
+
+# Pymode-generated files
+.ropeproject
