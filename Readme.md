@@ -63,5 +63,5 @@ Alternatively you can simply add the following line to your vimrc file if you ar
 Vundle and let the plugin arrange everything.
 
 ```vimrc
-    Plugin 'adah1972/ycmconf'
+    Plugin 'l3nkz/ycmconf'
 ```
