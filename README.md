@@ -5,12 +5,12 @@
 [YouCompleteMe][1] (most often abbreviated as ‘YCM’) is a revolutionary
 Vim plugin, but its configuration is a bit … elusive. Luckily I have
 found [l3nkz/ycmconf][2], which makes my life much easier, especially
-because I use [CMake][3] and [clang_complete][4] too. With this plugin,
-the CMake output or a *.clang_complete* file will suffice (I prefer the
-latter), and I do not need to put any *.ycm_extra_conf.py* files in my
+because I use [CMake][3] and [clang\_complete][4] too. With this plugin,
+the CMake output or a *.clang\_complete* file will suffice (I prefer the
+latter), and I do not need to put any *.ycm\_extra\_conf.py* files in my
 code projects any longer. I also do not need to click on the YCM
-confirmation prompt every time, or configure which *.ycm_extra_conf.py*
-files should be considered secure in my *.vimrc*.
+confirmation prompt every time, or configure which
+*.ycm\_extra\_conf.py* files should be considered secure in my *.vimrc*.
 
 The major problem of l3nkz/ycmconf was that it had not been updated
 since April 2015, and it stopped working with the latest clangd-based
@@ -59,18 +59,18 @@ Then restart Vim and run `:PluginInstall`.
 
 Do one of the following:
 
-- Put a *compile_commands.json* file (output by a
+- Put a *compile\_commands.json* file (output by a
   `set(CMAKE_EXPORT_COMPILE_COMMANDS 1)` line in *CMakeLists.txt*) in
   the source code directory, or one of its parent directories.
-- Put a *.clang_complete* file in the source directory, or one of its
+- Put a *.clang\_complete* file in the source directory, or one of its
   parent directories.
 
 The first method is more precise, but it does not work if the code
 directories are shared (absolute paths are used in
-*compile_commands.json*).
+*compile\_commands.json*).
 
-A sample *.clang_complete* file can be found in [geek_time_cpp][5]. It
-is quite trivial to maintain.
+A sample *.clang\_complete* file can be found in [geek\_time\_cpp][5].
+It is quite trivial to maintain.
 
 [1]: https://github.com/Valloric/YouCompleteMe
 [2]: https://github.com/l3nkz/ycmconf
