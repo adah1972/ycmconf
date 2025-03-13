@@ -80,6 +80,16 @@ cpp_additional_flags = [
     "-std=c++17",
 ]
 
+##
+# Pattern for C std options
+##
+C_STD_PATTERN = re.compile(r'-std=(?:c|gnu)[0-9]+$')
+
+##
+# Pattern for C++ std options
+##
+CPP_STD_PATTERN = re.compile(r'-std=(?:c|gnu)\+\+[0-9]+$')
+
 
 ####
 # Helper functions
@@ -184,7 +194,6 @@ def is_c_project(flags):
     :rtype: bool
     :return: True if a C standard is specified or False if not.
     """
-    C_STD_PATTERN = re.compile(r'-std=(?:c|gnu)[0-9]+$')
     for flag in flags:
         if C_STD_PATTERN.match(flag):
             return True
@@ -384,6 +393,38 @@ def strip_flags(flags):
     return [flag.strip() for flag in flags]
 
 
+def drop_c_std_flag(flags):
+    """
+    Drop the conflicting C language std option, most likely specified in
+    the .clang_complete configuration file, from the flags.
+
+    E.g. If the flags contain "-std=c11", but the current file is a C++
+    source file, the "-std=" flag should not be applied.
+
+    :param flags: The list of compilation flags which should be checked.
+    :type flags: list[str]
+    :rtype: list[str]
+    :return: The result list which discards the conflicting std flag.
+    """
+    return [flag for flag in flags if not C_STD_PATTERN.match(flag)]
+
+
+def drop_cpp_std_flag(flags):
+    """
+    Drop the conflicting C++ language std option, most likely specified
+    in the .clang_complete configuration file, from the flags.
+
+    E.g. If the flags contain "-std=c++17", but the current file is a C
+    source file, the "-std=" flag should not be applied.
+
+    :param flags: The list of compilation flags which should be checked.
+    :type flags: list[str]
+    :rtype: list[str]
+    :return: The result list which discards the conflicting std flag.
+    """
+    return [flag for flag in flags if not CPP_STD_PATTERN.match(flag)]
+
+
 def make_final_flags(file_name, flags, base_dir=getcwd()):
     """
     Finalize the given flags for the file of interest. This step
@@ -401,17 +442,15 @@ def make_final_flags(file_name, flags, base_dir=getcwd()):
     :rtype: dict[str,object]
     :return: The finalized flags for the file in the format wanted by YCM.
     """
-    stripped = strip_flags(flags)
-    absolute = make_absolute_flags(stripped, base_dir)
+    flags = strip_flags(flags)
+    flags = make_absolute_flags(flags, base_dir)
 
-    if is_cpp_file(file_name, h_is_c_header=is_c_project(stripped)):
-        final = save_add_flags(absolute, cpp_additional_flags)
+    if is_cpp_file(file_name, h_is_c_header=is_c_project(flags)):
+        flags = save_add_flags(drop_c_std_flag(flags), cpp_additional_flags)
     elif is_c_file(file_name):
-        final = save_add_flags(absolute, c_additional_flags)
-    else:
-        final = absolute
+        flags = save_add_flags(drop_cpp_std_flag(flags), c_additional_flags)
 
-    return create_result(final)
+    return create_result(flags)
 
 
 def save_add_flags(old_flags, additional_flags):
