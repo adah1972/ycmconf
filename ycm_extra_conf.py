@@ -217,7 +217,7 @@ def is_c_header(file_path):
     return extension in c_header_extensions
 
 
-def is_cpp_header(file_path):
+def is_cpp_header(file_path, h_is_c_header=False):
     """
     Checks if the given file is a CPP header file or not.
 
@@ -227,6 +227,9 @@ def is_cpp_header(file_path):
     :return: True if the file is a CPP header or False if not.
     """
     (_, extension) = splitext(file_path)
+
+    if h_is_c_header and extension == ".h":
+        return False
 
     return extension in cpp_header_extensions
 
@@ -283,7 +286,7 @@ def is_c_file(file_path):
     return is_c_source(file_path) or is_c_header(file_path)
 
 
-def is_cpp_file(file_path):
+def is_cpp_file(file_path, h_is_c_header=False):
     """
     Checks if the given file is a CPP file or not.
 
@@ -292,7 +295,8 @@ def is_cpp_file(file_path):
     :rtype: bool
     :return: True if the file is a CPP file or False if not.
     """
-    return is_cpp_source(file_path) or is_cpp_header(file_path)
+    return is_cpp_source(file_path) or is_cpp_header(file_path,
+                                                     h_is_c_header)
 
 
 ##
@@ -400,10 +404,7 @@ def make_final_flags(file_name, flags, base_dir=getcwd()):
     stripped = strip_flags(flags)
     absolute = make_absolute_flags(stripped, base_dir)
 
-    if is_c_project(stripped):
-        cpp_header_extensions.remove(".h")
-
-    if is_cpp_file(file_name):
+    if is_cpp_file(file_name, h_is_c_header=is_c_project(stripped)):
         final = save_add_flags(absolute, cpp_additional_flags)
     elif is_c_file(file_name):
         final = save_add_flags(absolute, c_additional_flags)
