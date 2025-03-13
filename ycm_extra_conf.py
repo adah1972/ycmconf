@@ -184,9 +184,9 @@ def is_c_project(flags):
     :rtype: bool
     :return: True if a C standard is specified or False if not.
     """
-    C_STD_PATTERN = re.compile(r'-std=[a-z]+[0-9]+$')
+    C_STD_PATTERN = re.compile(r'-std=(?:c|gnu)[0-9]+$')
     for flag in flags:
-        if re.match(C_STD_PATTERN, flag):
+        if C_STD_PATTERN.match(flag):
             return True
     return False
 
