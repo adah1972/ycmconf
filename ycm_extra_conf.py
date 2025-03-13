@@ -1,4 +1,5 @@
 import ycm_core
+import re
 from os import getcwd
 from os.path import abspath, join, isabs, exists, splitext, dirname
 
@@ -173,6 +174,22 @@ def script_directory():
 ##
 # Methods to check for the different source file types
 ##
+
+def is_c_project(flags):
+    """
+    Checks flags to see whether something like '-std=c99' is specified.
+
+    :param flags: The list of flags to check.
+    :type flags: list[str]
+    :rtype: bool
+    :return: True if a C standard is specified or False if not.
+    """
+    C_STD_PATTERN = re.compile(r'-std=[a-z]+[0-9]+$')
+    for flag in flags:
+        if re.match(C_STD_PATTERN, flag):
+            return True
+    return False
+
 
 def is_header(file_path):
     """
@@ -382,6 +399,9 @@ def make_final_flags(file_name, flags, base_dir=getcwd()):
     """
     stripped = strip_flags(flags)
     absolute = make_absolute_flags(stripped, base_dir)
+
+    if is_c_project(stripped):
+        cpp_header_extensions.remove(".h")
 
     if is_cpp_file(file_name):
         final = save_add_flags(absolute, cpp_additional_flags)
