@@ -59,9 +59,9 @@ Then restart Vim and run `:PluginInstall`.
 
 Do one of the following:
 
-- Put a *compile\_commands.json* file (output by a
-  `set(CMAKE_EXPORT_COMPILE_COMMANDS 1)` line in *CMakeLists.txt*) in
-  the source code directory, or one of its parent directories.
+- Put a *compile\_commands.json* file in the source code directory, or one of
+  its parent directories. If you use CMake, it can be easily generated with
+  the `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` command-line option.
 - Put a *.clang\_complete* file in the source directory, or one of its
   parent directories.
 
